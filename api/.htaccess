@@ -1,0 +1,16 @@
+# Allow POST requests to proxy
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
+# Handle API requests
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /api/
+    
+    # Allow direct access to gemini-proxy.js
+    RewriteCond %{REQUEST_FILENAME} gemini-proxy\.js$
+    RewriteRule ^(.*)$ $1 [L]
+</IfModule>

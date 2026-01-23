@@ -1,0 +1,8 @@
+{
+  "name": "Agendei AI - Plataforma de Agendamentos Inteligentes",
+  "description": "Uma plataforma completa para prestadores de serviços com perfis sociais, portfólio e um agente de IA inteligente para agendamentos automáticos via chat.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
