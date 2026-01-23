@@ -27,8 +27,8 @@ export async function getBookingResponse(
       { role: "user", parts: [{ text: message }] }
     ];
 
-    // Tenta chamar via API remota primeiro (backend proxy ou Vercel)
-    const apiResponse = await fetch('/api/gemini-proxy', {
+    // Chamar a Serverless Function do Vercel
+    const apiResponse = await fetch('/api/gemini', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,9 +40,8 @@ export async function getBookingResponse(
     });
 
     if (!apiResponse.ok) {
-      console.warn('API proxy falhou, tentando fallback...');
-      // Se o proxy falhar, usa fallback
-      return await callGeminiDirectly(message, provider, history, systemInstruction);
+      console.error('Erro na API:', apiResponse.status, apiResponse.statusText);
+      throw new Error(`API retornou ${apiResponse.status}`);
     }
 
     const data = await apiResponse.json();
@@ -51,64 +50,9 @@ export async function getBookingResponse(
       return data.candidates[0].content.parts[0].text;
     }
     
-    throw new Error('Resposta inválida da API');
+    throw new Error('Resposta inválida da API Gemini');
   } catch (error) {
     console.error('Erro ao chamar Gemini:', error);
-    return "Desculpe, tive um problema técnico. Pode tentar novamente?";
-  }
-}
-
-async function callGeminiDirectly(
-  message: string,
-  provider: Provider,
-  history: any[],
-  systemInstruction: string
-) {
-  // Fallback: tenta chamar diretamente via proxy ou retorna erro
-  try {
-    const apiKey = import.meta.env?.VITE_GOOGLE_API_KEY;
-    
-    if (!apiKey) {
-      return "API não configurada. Contate o administrador.";
-    }
-
-    // Chamada direta usando fetch (requer CORS configurado)
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: systemInstruction }]
-          },
-          contents: [
-            ...history,
-            { role: "user", parts: [{ text: message }] }
-          ],
-          generationConfig: {
-            temperature: 0.1,
-          },
-        }),
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error('Erro na API:', data);
-      return "Desculpe, tive um problema técnico. Pode tentar novamente?";
-    }
-
-    if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-      return data.candidates[0].content.parts[0].text;
-    }
-
-    return "Desculpe, recebi uma resposta vazia. Tente novamente.";
-  } catch (error) {
-    console.error('Erro no fallback:', error);
-    return "Desculpe, tive um problema técnico. Pode tentar novamente?";
+    return "Desculpe, tive um problema técnico ao processar sua requisição. Pode tentar novamente?";
   }
 }
