@@ -40,19 +40,30 @@ export async function getBookingResponse(
     });
 
     if (!apiResponse.ok) {
-      console.error('Erro na API:', apiResponse.status, apiResponse.statusText);
-      throw new Error(`API retornou ${apiResponse.status}`);
+      let errorDetail = '';
+      try {
+        const errorData = await apiResponse.json();
+        errorDetail = errorData.details || errorData.error || errorData.message || '';
+      } catch (e) { }
+
+      console.error('Erro na API:', apiResponse.status, apiResponse.statusText, errorDetail);
+      throw new Error(`API retornou ${apiResponse.status}${errorDetail ? ': ' + errorDetail : ''}`);
     }
 
     const data = await apiResponse.json();
+    console.log('Gemini raw response:', data);
 
     if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
       return data.candidates[0].content.parts[0].text;
     }
 
-    throw new Error('Resposta inválida da API Gemini');
-  } catch (error) {
+    if (data.error) {
+      throw new Error(`Erro do Gemini: ${data.error.message || 'Erro desconhecido'}`);
+    }
+
+    throw new Error('Resposta inválida: Candidatos não encontrados');
+  } catch (error: any) {
     console.error('Erro ao chamar Gemini:', error);
-    return "Desculpe, tive um problema técnico ao processar sua requisição. Pode tentar novamente?";
+    return `Desculpe, tive um problema técnico: ${error.message}. Por favor, verifique se suas chaves de API estão corretas na Vercel e tente novamente.`;
   }
 }
