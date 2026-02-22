@@ -17,13 +17,22 @@ dist-ssr
 .env.local
 .env.*.local
 
-# Editor directories and files
+# Editor/IDEs
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Misc
+.vercel
