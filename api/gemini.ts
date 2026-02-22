@@ -52,12 +52,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Erro ao chamar API Gemini:', data);
+      console.error('Erro retornado pela API Gemini (Google):', data);
       return res.status(response.status).json({
-        error: 'Erro ao processar requisição',
-        details: data.error?.message || 'Erro desconhecido'
+        error: 'Erro na API do Gemini (Google)',
+        details: data.error?.message || JSON.stringify(data)
       });
     }
+
+    // Log de sucesso (útil no Vercel Dashboard -> Logs)
+    console.log('Gemini respondeu com sucesso!');
 
     // Retornar resposta do Gemini
     return res.status(200).json(data);
