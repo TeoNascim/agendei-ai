@@ -1,116 +1,56 @@
-# Deploy no Vercel - Passo a Passo
+# 🚀 Guia de Deploy na Vercel - Agendei AI
 
-## 📋 Pré-requisitos
-- Conta no GitHub (recomendado) ou Vercel
-- Conta no Vercel (gratuita em https://vercel.com)
+Este guia fornece o passo a passo definitivo para colocar sua plataforma **Agendei AI** online usando a Vercel.
 
-## 🚀 Opção 1: Deploy via GitHub (Recomendado)
+## 1. Preparação (GitHub)
 
-### 1. Prepare seu repositório GitHub
+Certifique-se de que seu código local está atualizado no GitHub:
 ```bash
-# Se ainda não tem Git inicializado
-git init
 git add .
-git commit -m "Initial commit"
-git branch -M main
+git commit -m "docs: update deployment info"
+git push origin main
 ```
 
-### 2. Crie um repositório no GitHub
-- Acesse https://github.com/new
-- Crie um novo repositório (ex: `agendei-ai`)
-- Copie o comando para push
+## 2. Configuração na Vercel
 
-### 3. Faça push do seu projeto
-```bash
-git remote add origin https://github.com/seu-usuario/agendei-ai.git
-git push -u origin main
-```
+1. **Importar Projeto**:
+   - Vá para o [Dashboard da Vercel](https://vercel.com/dashboard).
+   - Clique em **"Add New..."** -> **"Project"**.
+   - Conecte sua conta do GitHub e importe o repositório `agendei-ai`.
 
-### 4. Conecte ao Vercel
-- Acesse https://vercel.com/new
-- Clique em "Import Git Repository"
-- Selecione seu repositório do GitHub
-- Vercel detectará automaticamente as configurações
+2. **Configurações de Build**:
+   - A Vercel deve detectar automaticamente que é um projeto **Vite**.
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
 
-### 5. Configure Variáveis de Ambiente
-- Em "Environment Variables", adicione:
-  - **Name:** `VITE_GOOGLE_API_KEY`
-  - **Value:** `AIzaSyAR_GtMLRqTVnpQaa_W_cpKZyoKAbfVHZE`
-- Clique em "Deploy"
+3. **Variáveis de Ambiente (Environment Variables)**:
+   Este é o passo mais importante. Adicione as seguintes variáveis na seção "Environment Variables":
 
-## 🚀 Opção 2: Deploy via Vercel CLI (Sem GitHub)
+   | Nome | Valor |
+   | :--- | :--- |
+   | `VITE_GOOGLE_API_KEY` | Sua chave da API do Google Gemini |
+   | `VITE_SUPABASE_URL` | A URL do seu projeto Supabase |
+   | `VITE_SUPABASE_ANON_KEY` | A chave anônima (anon key) do seu Supabase |
 
-### 1. Instale Vercel CLI globalmente
-```bash
-npm install -g vercel
-```
+   > [!IMPORTANT]
+   > Certifique-se de copiar os nomes exatamente como aparecem acima (tudo em maiúsculas).
 
-### 2. Faça login
-```bash
-vercel login
-```
+4. **Deploy**:
+   - Clique em **"Deploy"**.
+   - Aguarde alguns minutos para a conclusão do build.
 
-### 3. Deploy do projeto
-```bash
-cd c:\imagens\AgenteAi
-vercel
-```
+## 3. Verificação Pós-Deploy
 
-### 4. Durante o deploy:
-- Responda as perguntas:
-  - **Which scope?** → Selecione seu email/conta
-  - **Link to existing project?** → `n` (novo projeto)
-  - **What's your project's name?** → `agendei-ai`
-  - **In which directory?** → `.`
-  - **Override settings?** → `n`
+Após o deploy, a Vercel fornecerá uma URL (ex: `agendei-ai.vercel.app`).
+1. Acesse a URL.
+2. Teste o chat com a IA para garantir que a `VITE_GOOGLE_API_KEY` está funcionando.
+3. Verifique se os dados do Supabase estão sendo carregados corretamente.
 
-### 5. Configure a variável de ambiente
-Após deploy:
-```bash
-vercel env add VITE_GOOGLE_API_KEY
-# Cole: AIzaSyAR_GtMLRqTVnpQaa_W_cpKZyoKAbfVHZE
-# Responda: production, preview, development (ou todos)
-```
+## 4. Troubleshooting (Resolução de Problemas)
 
-### 6. Redeploy
-```bash
-vercel --prod
-```
-
-## ✅ O que está configurado
-
-- ✅ `vercel.json` - Configuração de rewrite de URLs para SPA
-- ✅ `api/gemini-proxy.js` - Função serverless para chamar Gemini
-- ✅ CORS habilitado automaticamente
-- ✅ `dist/` - Pronto para production
-
-## 🔍 Testando após deploy
-
-1. Acesse sua URL do Vercel (ex: https://agendei-ai.vercel.app)
-2. Teste o agendamento com IA
-3. Verifique console (F12) para erros
-
-## 🐛 Troubleshooting
-
-### "API não encontrada" ou erro 404
-- Verifique se a variável `VITE_GOOGLE_API_KEY` está configurada
-- Redeploy após adicionar a variável
-
-### Erro CORS
-- Já está habilitado no `vercel.json`
-- Limpe cache do navegador
-
-### Chat não funciona
-- Abra Console (F12)
-- Procure por erros de requisição
-- Verifique se `/api/gemini-proxy` responde
-
-## 📚 Documentação
-- Vercel: https://vercel.com/docs
-- Serverless Functions: https://vercel.com/docs/serverless-functions
-- Environment Variables: https://vercel.com/docs/projects/environment-variables
+- **Erro de API (404 ou 500)**: Verifique se as variáveis de ambiente foram salvas corretamente no dashboard da Vercel. Se você as adicionou *após* o primeiro deploy, precisará fazer um novo deploy para que elas entrem em vigor.
+- **Página não encontrada ao atualizar (404)**: O arquivo `vercel.json` já está configurado no projeto para resolver rotas do React (Single Page Application).
+- **CORS Errors**: As configurações de cabeçalhos já estão incluídas no `vercel.json` para permitir a comunicação com a API Gemini.
 
 ---
-
-**Projeto pronto! 🎉**
-Após deploy, você terá um agendador de IA rodando em produção!
+Dúvidas? Consulte a documentação oficial da [Vercel](https://vercel.com/docs).
