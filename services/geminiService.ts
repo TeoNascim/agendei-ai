@@ -27,7 +27,7 @@ export async function getBookingResponse(
       { role: "user", parts: [{ text: message }] }
     ];
 
-    // Chamar a Serverless Function do Vercel
+    // Chamada para a Vercel Serverless Function (api/gemini.ts)
     const apiResponse = await fetch('/api/gemini', {
       method: 'POST',
       headers: {
@@ -45,11 +45,11 @@ export async function getBookingResponse(
     }
 
     const data = await apiResponse.json();
-    
+
     if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
       return data.candidates[0].content.parts[0].text;
     }
-    
+
     throw new Error('Resposta inválida da API Gemini');
   } catch (error) {
     console.error('Erro ao chamar Gemini:', error);
