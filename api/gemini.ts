@@ -31,9 +31,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // Chamar API do Google Gemini (v1beta para suporte a system_instruction)
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    console.log('Deploy v9: Checking new API key...');
+    // Chamar API do Google Gemini (v1beta com alias latest para garantir suporte)
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    console.log('Deploy v10: Using gemini-1.5-flash-latest on v1beta...');
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {

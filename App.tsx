@@ -243,8 +243,8 @@ const MainContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50/50 md:pt-20">
       {/* DIAGNOSTIC BANNER */}
-      <div className="bg-blue-600 text-white text-[10px] font-bold text-center py-1 uppercase tracking-tighter fixed top-0 left-0 w-full z-[9999]">
-        DEBUG MODE: v9 (New API Key Deploy) - {new Date().toLocaleTimeString()}
+      <div className="bg-emerald-600 text-white text-[10px] font-bold text-center py-1 uppercase tracking-tighter fixed top-0 left-0 w-full z-[9999]">
+        DEBUG MODE: v10 (v1beta + flash-latest) - {new Date().toLocaleTimeString()}
       </div>
       <script>console.log("APP VERSION: 5 - AGENT_FORCE_BUILD");</script>
       <Navigation
