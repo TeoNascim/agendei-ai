@@ -244,7 +244,7 @@ const MainContent: React.FC = () => {
     <div className="min-h-screen bg-slate-50/50 md:pt-20">
       {/* DIAGNOSTIC BANNER */}
       <div className="bg-red-600 text-white text-[10px] font-bold text-center py-1 uppercase tracking-tighter fixed top-0 left-0 w-full z-[9999]">
-        DEBUG MODE: v7 (systemInstruction camelCase) - {new Date().toLocaleTimeString()}
+        DEBUG MODE: v8 (v1beta + snake_case) - {new Date().toLocaleTimeString()}
       </div>
       <script>console.log("APP VERSION: 5 - AGENT_FORCE_BUILD");</script>
       <Navigation
