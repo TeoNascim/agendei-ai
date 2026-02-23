@@ -44,7 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           generationConfig: {
             temperature: 0.1,
           },
-          system_instruction: {
+          systemInstruction: {
             parts: [{ text: message }]
           },
         }),
