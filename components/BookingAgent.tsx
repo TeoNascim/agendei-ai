@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, X, CheckCircle2, Calendar as CalendarIcon } from 'lucide-react';
-import { getBookingResponse } from '../services/geminiService.ts';
+import { getBookingResponse } from '../services/aiService.ts';
 import { Provider, ChatMessage, Appointment } from '../types.ts';
 
 interface BookingAgentProps {
