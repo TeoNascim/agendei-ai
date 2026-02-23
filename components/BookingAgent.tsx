@@ -26,6 +26,7 @@ const BookingAgent: React.FC<BookingAgentProps> = ({ provider, onClose, onConfir
   }, [messages, isLoading, confirmedApt]);
 
   const handleSend = async () => {
+    console.log("AGENT: handleSend triggered - v5");
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
