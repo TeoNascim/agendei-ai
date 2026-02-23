@@ -32,23 +32,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Chamar API do Google Gemini (v1beta para suporte a system_instruction)
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    console.log('Hitting Gemini API v1beta...');
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: contents,
+        generationConfig: {
+          temperature: 0.1,
         },
-        body: JSON.stringify({
-          contents: contents,
-          generationConfig: {
-            temperature: 0.1,
-          },
-          system_instruction: {
-            parts: [{ text: message }]
-          },
-        }),
-      }
+        system_instruction: {
+          parts: [{ text: message }]
+        },
+      }),
+    }
     );
 
     const data = await response.json();
