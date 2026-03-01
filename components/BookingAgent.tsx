@@ -70,8 +70,8 @@ const BookingAgent: React.FC<BookingAgentProps> = ({ provider, onClose, onConfir
       }
 
       setMessages(prev => [...prev, { role: 'model', content: responseText }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'model', content: "Desculpe, tive um problema técnico. Pode tentar novamente?" }]);
+    } catch (error: any) {
+      setMessages(prev => [...prev, { role: 'model', content: `Erro técnico: ${error.message || 'Desconhecido'}. Por favor, verifique se sua API Key foi configurada na Vercel.` }]);
     } finally {
       setIsLoading(false);
     }
