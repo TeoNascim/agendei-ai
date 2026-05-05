@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agendei AI - v2 (Backend Fix)</title>
+  <title>Agendei AI — Plataforma de Agendamentos Inteligentes</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
@@ -18,6 +18,13 @@
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f8fafc;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+    .animate-\[slideIn_0\.25s_ease-out\] {
+      animation: slideIn 0.25s ease-out both;
     }
   </style>
 </head>

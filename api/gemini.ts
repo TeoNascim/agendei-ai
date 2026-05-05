@@ -21,13 +21,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { message, contents } = req.body;
 
     // Obter chave da API do Gemini via variável de ambiente
-    const apiKey = process.env.VITE_GOOGLE_API_KEY;
+    const apiKey = process.env.GOOGLE_API_KEY;
 
     if (!apiKey) {
-      console.error('ERRO: VITE_GOOGLE_API_KEY não está configurada nas variáveis de ambiente');
+      console.error('ERRO: GOOGLE_API_KEY não está configurada nas variáveis de ambiente');
       return res.status(500).json({
         error: 'API Key não configurada no servidor',
-        details: 'Configure VITE_GOOGLE_API_KEY nas Environment Variables do Vercel'
+        details: 'Configure GOOGLE_API_KEY nas Environment Variables do Vercel'
       });
     }
 

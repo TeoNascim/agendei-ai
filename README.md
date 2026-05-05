@@ -48,7 +48,7 @@
    ```env
    VITE_SUPABASE_URL=sua_url_supabase
    VITE_SUPABASE_ANON_KEY=sua_chave_anonima_supabase
-   VITE_GEMINI_API_KEY=sua_chave_gemini
+   GOOGLE_API_KEY=sua_chave_gemini
    ```
 
 4. **Prepare o Banco de Dados:**

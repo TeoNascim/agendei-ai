@@ -4,6 +4,7 @@ import { DollarSign, Users, Calendar, TrendingUp, Plus, Settings, LogOut, X, Ima
 import { Provider, PortfolioPost, Service, Appointment } from '../types.ts';
 import { supabase } from '../lib/supabase.ts';
 import ImageUpload from './ImageUpload.tsx';
+import { useToast } from './Toast.tsx';
 
 interface DashboardProps {
   provider: Provider;
@@ -12,6 +13,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) => {
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'overview' | 'services' | 'availability'>('overview');
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -85,8 +87,9 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
       setIsPostModalOpen(false);
       setNewPostImage('');
       setNewPostCaption('');
+      showToast('Post publicado com sucesso!', 'success');
     } catch (error) {
-      alert('Erro ao salvar post.');
+      showToast('Erro ao salvar post. Tente novamente.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -106,8 +109,9 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
       if (error) throw error;
       if (onUpdate) onUpdate({ ...provider, ...editForm });
       setIsSettingsModalOpen(false);
+      showToast('Configurações salvas!', 'success');
     } catch (error) {
-      alert('Erro ao salvar configurações.');
+      showToast('Erro ao salvar configurações.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +127,7 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
       if (onLogout) onLogout();
     } catch (error) {
       console.error(error);
-      alert('Erro ao excluir conta.');
+      showToast('Erro ao excluir conta. Tente novamente.', 'error');
       setIsLoading(false);
     }
   };
@@ -153,8 +157,9 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
       if (onUpdate) onUpdate({ ...provider, services: updatedServices });
       setIsServiceModalOpen(false);
       setServiceForm({ name: '', price: 0, duration: 30, description: '' });
+      showToast(serviceForm.id ? 'Serviço atualizado!' : 'Serviço adicionado!', 'success');
     } catch (error) {
-      alert('Erro ao salvar serviço.');
+      showToast('Erro ao salvar serviço.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -171,8 +176,9 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
     try {
       await supabase.from('providers').update({ services: updatedServices }).eq('id', provider.id);
       if (onUpdate) onUpdate({ ...provider, services: updatedServices });
+      showToast('Serviço removido.', 'warning');
     } catch (error) {
-      alert('Erro ao remover serviço.');
+      showToast('Erro ao remover serviço.', 'error');
     }
   };
 
@@ -207,9 +213,9 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
     try {
       await supabase.from('providers').update({ available_slots: updatedSlots }).eq('id', provider.id);
       if (onUpdate) onUpdate({ ...provider, availableSlots: updatedSlots });
-      alert(`${slotsToAdd.length} horários gerados!`);
+      showToast(`${slotsToAdd.length} horários gerados com sucesso!`, 'success');
     } catch (error) {
-      alert('Erro ao gerar horários.');
+      showToast('Erro ao gerar horários.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -221,7 +227,7 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
     try {
       await supabase.from('providers').update({ available_slots: updatedSlots }).eq('id', provider.id);
       if (onUpdate) onUpdate({ ...provider, availableSlots: updatedSlots });
-    } catch (e) { alert('Erro ao remover horário'); }
+    } catch (e) { showToast('Erro ao remover horário.', 'error'); }
   };
 
   const handleLogoutClick = () => {

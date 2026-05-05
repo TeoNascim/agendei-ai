@@ -101,18 +101,29 @@ const BookingAgent: React.FC<BookingAgentProps> = ({ provider, onClose, onConfir
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`p-4 rounded-3xl ${msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-800'}`}>
+              <div className={`p-4 rounded-3xl max-w-[80%] whitespace-pre-wrap leading-relaxed ${
+                msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-800'
+              }`}>
                 {msg.content}
               </div>
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-slate-100 rounded-3xl p-4 flex gap-1.5 items-center">
+                <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </div>
+          )}
         </div>
         <div className="p-6 border-t border-slate-100 flex space-x-2">
           <input
             className="flex-1 bg-slate-50 p-4 rounded-2xl outline-none"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Digite aqui..."
           />
           <button onClick={handleSend} className="bg-indigo-600 text-white p-4 rounded-2xl"><Send /></button>
