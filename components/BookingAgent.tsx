@@ -42,26 +42,48 @@ const BookingAgent: React.FC<BookingAgentProps> = ({ provider, onClose, onConfir
 
       const responseText = await getBookingResponse(userMessage, provider, history);
 
-      // Check for JSON confirmation
+      // Verifica se a resposta é um JSON de confirmação de agendamento
       try {
         const cleanJson = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
         if (cleanJson.startsWith('{') && cleanJson.endsWith('}')) {
           const data = JSON.parse(cleanJson);
           if (data.confirmation) {
-            const matchedService = provider.services.find(s => s.name === data.serviceName) || provider.services[0];
+            // Extrai o ISO puro: pode vir como string ISO direta ou com [ref: ...]
+            const rawDate: string = data.date || '';
+            const refMatch = rawDate.match(/\[ref:\s*([^\]]+)\]/);
+            const isoDate = refMatch ? refMatch[1].trim() : rawDate.trim();
+
+            const matchedService = provider.services.find(
+              s => s.name.toLowerCase() === data.serviceName?.toLowerCase()
+            ) || provider.services[0];
+
             const newApt: Appointment = {
               id: crypto.randomUUID(),
               providerId: provider.id,
               providerName: provider.name,
               serviceName: matchedService.name,
               clientName: data.clientName,
-              startTime: data.date,
+              startTime: isoDate,
               status: 'confirmed',
               price: matchedService.price
             };
+
+            // Formata data de confirmação em PT-BR
+            const aptDate = new Date(isoDate);
+            const dateFormatted = aptDate.toLocaleDateString('pt-BR', {
+              weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric',
+              timeZone: 'America/Sao_Paulo'
+            });
+            const timeFormatted = aptDate.toLocaleTimeString('pt-BR', {
+              hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo'
+            });
+
             setConfirmedApt(newApt);
             onConfirm(newApt);
-            setMessages(prev => [...prev, { role: 'model', content: `Agendamento confirmado para ${data.serviceName} no dia ${new Date(data.date).toLocaleDateString()} às ${new Date(data.date).toLocaleTimeString()}. Te aguardo!` }]);
+            setMessages(prev => [...prev, {
+              role: 'model',
+              content: `Agendamento confirmado!\n\n${matchedService.name}\n${dateFormatted} às ${timeFormatted}\n${data.clientName}\n\nTe aguardamos!`
+            }]);
             return;
           }
         }
