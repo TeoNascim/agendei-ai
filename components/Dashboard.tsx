@@ -246,41 +246,36 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
 
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 space-y-6 animate-fade-up">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-[32px] border border-slate-100 gap-4">
-        <div className="flex items-center space-x-4 w-full md:w-auto">
-          <img src={provider.avatar} className="w-16 h-16 rounded-2xl object-cover border border-slate-100" />
+      <div className="bg-white rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+           style={{ boxShadow: 'var(--shadow-sm)' }}>
+        <div className="flex items-center gap-4">
+          <img src={provider.avatar} className="w-14 h-14 rounded-2xl object-cover" style={{ boxShadow: 'var(--shadow-md)' }} alt={provider.name} />
           <div>
-            <h1 className="text-2xl font-black text-slate-900">{provider.name}</h1>
-            <span className="text-sm text-slate-500 font-medium">{provider.category}</span>
+            <h1 className="text-xl font-black text-gray-900">{provider.name}</h1>
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: 'var(--brand-light)', color: 'var(--brand)' }}>{provider.category}</span>
           </div>
         </div>
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          {/* Tab Navigation           */}
-          <div className="flex bg-slate-100 p-1 rounded-2xl mr-4">
-            <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'overview' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'} `}>Visão Geral</button>
-            <button onClick={() => setActiveTab('services')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'services' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'} `}>Serviços</button>
-            <button onClick={() => setActiveTab('availability')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'availability' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'} `}>Horários</button>
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <div className="flex bg-gray-100 p-1 rounded-2xl flex-1 md:flex-none">
+            {(['overview','services','availability'] as const).map((tab, i) => (
+              <button key={tab} onClick={() => setActiveTab(tab)}
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                  activeTab === tab ? 'bg-white shadow-sm text-gray-900' : 'text-gray-400 hover:text-gray-600'
+                }`}>
+                {['Visão Geral','Serviços','Horários'][i]}
+              </button>
+            ))}
           </div>
-
-          <button
-            onClick={() => {
-              setEditForm({
-                name: provider.name,
-                bio: provider.bio,
-                category: provider.category,
-                avatar: provider.avatar,
-                coverImage: provider.coverImage
-              });
-              setIsSettingsModalOpen(true);
-            }}
-            className="p-3 bg-slate-100 text-slate-600 rounded-2xl hover:bg-slate-200 transition-colors"
-          >
-            <Settings className="w-6 h-6" />
+          <button onClick={() => { setEditForm({ name: provider.name, bio: provider.bio, category: provider.category, avatar: provider.avatar, coverImage: provider.coverImage }); setIsSettingsModalOpen(true); }}
+            className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <Settings className="w-5 h-5 text-gray-500" />
           </button>
-          <button onClick={handleLogoutClick} className="p-3 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-colors">
-            <LogOut className="w-6 h-6" />
+          <button onClick={handleLogoutClick}
+            className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors"
+            style={{ background: '#FEF2F2' }}>
+            <LogOut className="w-5 h-5" style={{ color: '#DC2626' }} />
           </button>
         </div>
       </div>
@@ -290,41 +285,45 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
           <>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { label: 'Ganhos', value: `R$ ${metrics.earnings} `, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { label: 'Clientes', value: metrics.clients.toString(), icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-                { label: 'Agendamentos', value: metrics.appointments.toString(), icon: Calendar, color: 'text-indigo-600', bg: 'bg-indigo-50' },
-                { label: 'Crescimento', value: '...', icon: TrendingUp, color: 'text-rose-600', bg: 'bg-rose-50' },
+                { label: 'Ganhos', value: `R$ ${metrics.earnings}`, icon: DollarSign, grad: 'linear-gradient(135deg,#ECFDF5,#D1FAE5)', color: '#059669' },
+                { label: 'Clientes', value: metrics.clients.toString(), icon: Users, grad: 'linear-gradient(135deg,#EFF6FF,#DBEAFE)', color: '#2563EB' },
+                { label: 'Agendamentos', value: metrics.appointments.toString(), icon: Calendar, grad: 'linear-gradient(135deg,#EEF2FF,#E0E7FF)', color: 'var(--brand)' },
+                { label: 'Crescimento', value: '+0%', icon: TrendingUp, grad: 'linear-gradient(135deg,#FFF7ED,#FFEDD5)', color: '#EA580C' },
               ].map((stat, i) => (
-                <div key={i} className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100">
-                  <div className={`p-3 rounded-2xl ${stat.bg} ${stat.color} w-fit mb-4`}>
-                    <stat.icon />
+                <div key={i} className="bg-white rounded-2xl p-5" style={{ boxShadow: 'var(--shadow-sm)' }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: stat.grad }}>
+                    <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                   </div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase">{stat.label}</p>
-                  <p className="text-2xl font-black">{stat.value}</p>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
+                  <p className="text-2xl font-black text-gray-900">{stat.value}</p>
                 </div>
               ))}
             </div>
 
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-black text-slate-900">Seus Posts Recentes</h2>
-              <button onClick={() => setIsPostModalOpen(true)} className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm">
-                <Plus className="w-4 h-4" /> Novo Post
+              <h2 className="text-base font-black text-gray-900">Portfólio</h2>
+              <button onClick={() => setIsPostModalOpen(true)}
+                className="flex items-center gap-1.5 text-white text-xs font-bold px-4 py-2.5 rounded-xl brand-gradient"
+                style={{ boxShadow: '0 4px 12px rgba(108,99,255,0.3)' }}>
+                <Plus className="w-3.5 h-3.5" /> Novo Post
               </button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {provider.portfolio && provider.portfolio.length > 0 ? (
-                provider.portfolio.map((post) => (
-                  <div key={post.id} className="aspect-square rounded-2xl overflow-hidden relative group">
-                    <img src={post.imageUrl} className="w-full h-full object-cover" alt={post.caption} />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                      <p className="text-white text-xs truncate">{post.caption}</p>
+                provider.portfolio.map(post => (
+                  <div key={post.id} className="aspect-square rounded-2xl overflow-hidden relative group cursor-pointer">
+                    <img src={post.imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt={post.caption} />
+                    <div className="absolute inset-0 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity"
+                         style={{ background: 'linear-gradient(to top,rgba(0,0,0,0.6),transparent)' }}>
+                      <p className="text-white text-xs font-medium line-clamp-2">{post.caption}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="col-span-full text-center py-10 bg-white rounded-[32px] border border-slate-100 text-slate-400">
-                  Nenhum post ainda.
+                <div className="col-span-full text-center py-12 bg-white rounded-2xl text-gray-300 font-medium"
+                     style={{ boxShadow: 'var(--shadow-sm)' }}>
+                  Nenhum post ainda. Adicione seu primeiro!
                 </div>
               )}
             </div>
@@ -334,32 +333,37 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
 
       {
         activeTab === 'services' && (
-          <div className="bg-white p-8 rounded-[32px] border border-slate-100 space-y-6">
+          <div className="bg-white rounded-2xl p-6 space-y-5" style={{ boxShadow: 'var(--shadow-sm)' }}>
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-black text-slate-900">Gerenciar Serviços</h2>
-              <button onClick={() => { setServiceForm({ name: '', price: 0, duration: 30, description: '' }); setIsServiceModalOpen(true); }} className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm">
-                <Plus className="w-4 h-4" /> Adicionar Serviço
+              <h2 className="text-base font-black text-gray-900">Gerenciar Serviços</h2>
+              <button onClick={() => { setServiceForm({ name: '', price: 0, duration: 30, description: '' }); setIsServiceModalOpen(true); }}
+                className="flex items-center gap-1.5 text-white text-xs font-bold px-4 py-2.5 rounded-xl brand-gradient"
+                style={{ boxShadow: '0 4px 12px rgba(108,99,255,0.3)' }}>
+                <Plus className="w-3.5 h-3.5" /> Adicionar
               </button>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {provider.services && provider.services.length > 0 ? (
                 provider.services.map(service => (
-                  <div key={service.id} className="flex justify-between items-center p-4 border border-slate-100 rounded-2xl hover:border-indigo-100 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><Scissors className="w-6 h-6" /></div>
+                  <div key={service.id} className="flex justify-between items-center p-4 rounded-2xl border transition-all hover:border-indigo-200"
+                       style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand-light)' }}>
+                        <Scissors className="w-5 h-5" style={{ color: 'var(--brand)' }} />
+                      </div>
                       <div>
-                        <h3 className="font-bold text-slate-900">{service.name}</h3>
-                        <p className="text-sm text-slate-500">{service.duration} min • R$ {service.price}</p>
+                        <p className="font-bold text-gray-900 text-sm">{service.name}</p>
+                        <p className="text-xs text-gray-400 font-medium">{service.duration} min • <span style={{ color: 'var(--brand)' }}>R$ {service.price}</span></p>
                       </div>
                     </div>
-                    <div className="flex gap-2">
-                      <button onClick={() => handleEditServiceClick(service)} className="p-2 text-slate-400 hover:text-indigo-600"><Edit2 className="w-5 h-5" /></button>
-                      <button onClick={() => handleDeleteService(service.id)} className="p-2 text-slate-400 hover:text-rose-500"><Trash2 className="w-5 h-5" /></button>
+                    <div className="flex gap-1">
+                      <button onClick={() => handleEditServiceClick(service)} className="w-8 h-8 rounded-xl bg-white flex items-center justify-center hover:text-indigo-600 transition-colors text-gray-400" style={{ border: '1px solid var(--border)' }}><Edit2 className="w-4 h-4" /></button>
+                      <button onClick={() => handleDeleteService(service.id)} className="w-8 h-8 rounded-xl bg-white flex items-center justify-center hover:text-rose-500 transition-colors text-gray-400" style={{ border: '1px solid var(--border)' }}><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-center text-slate-400 py-8">Nenhum serviço cadastrado.</p>
+                <p className="text-center text-gray-300 py-8 font-medium">Nenhum serviço cadastrado.</p>
               )}
             </div>
           </div>
@@ -368,32 +372,32 @@ const Dashboard: React.FC<DashboardProps> = ({ provider, onUpdate, onLogout }) =
 
       {
         activeTab === 'availability' && (
-          <div className="space-y-6">
-
-            {/* Generator */}
-            <div className="bg-white p-8 rounded-[32px] border border-slate-100 space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600"><RefreshCw className="w-5 h-5" /></div>
-                <h2 className="text-xl font-black text-slate-900">Gerador de Horários</h2>
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl p-6 space-y-5" style={{ boxShadow: 'var(--shadow-sm)' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand-light)' }}>
+                  <RefreshCw className="w-5 h-5" style={{ color: 'var(--brand)' }} />
+                </div>
+                <h2 className="text-base font-black text-gray-900">Gerador de Horários</h2>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 items-end">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
                 <div className="col-span-2 md:col-span-1">
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dia</label>
-                  <input type="date" className="w-full p-3 bg-slate-50 rounded-xl border" value={slotGen.date} onChange={e => setSlotGen({ ...slotGen, date: e.target.value })} />
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Dia</label>
+                  <input type="date" className="w-full p-3 rounded-xl text-sm font-medium input-brand transition-all" style={{ border: '1.5px solid var(--border)', background: 'var(--bg)' }} value={slotGen.date} onChange={e => setSlotGen({ ...slotGen, date: e.target.value })} />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Início</label>
-                  <input type="time" className="w-full p-3 bg-slate-50 rounded-xl border" value={slotGen.startTime} onChange={e => setSlotGen({ ...slotGen, startTime: e.target.value })} />
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Início</label>
+                  <input type="time" className="w-full p-3 rounded-xl text-sm font-medium input-brand transition-all" style={{ border: '1.5px solid var(--border)', background: 'var(--bg)' }} value={slotGen.startTime} onChange={e => setSlotGen({ ...slotGen, startTime: e.target.value })} />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Fim</label>
-                  <input type="time" className="w-full p-3 bg-slate-50 rounded-xl border" value={slotGen.endTime} onChange={e => setSlotGen({ ...slotGen, endTime: e.target.value })} />
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Fim</label>
+                  <input type="time" className="w-full p-3 rounded-xl text-sm font-medium input-brand transition-all" style={{ border: '1.5px solid var(--border)', background: 'var(--bg)' }} value={slotGen.endTime} onChange={e => setSlotGen({ ...slotGen, endTime: e.target.value })} />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Intervalo (min)</label>
-                  <input type="number" step="15" className="w-full p-3 bg-slate-50 rounded-xl border" value={slotGen.interval} onChange={e => setSlotGen({ ...slotGen, interval: Number(e.target.value) })} />
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Intervalo (min)</label>
+                  <input type="number" step="15" className="w-full p-3 rounded-xl text-sm font-medium input-brand transition-all" style={{ border: '1.5px solid var(--border)', background: 'var(--bg)' }} value={slotGen.interval} onChange={e => setSlotGen({ ...slotGen, interval: Number(e.target.value) })} />
                 </div>
-                <button onClick={handleGenerateSlots} disabled={isLoading} className="bg-indigo-600 text-white p-3 rounded-xl font-bold h-[50px] flex items-center justify-center">Gerar</button>
+                <button onClick={handleGenerateSlots} disabled={isLoading} className="brand-gradient text-white p-3 rounded-xl font-bold text-sm flex items-center justify-center gap-1.5 disabled:opacity-50" style={{ height: '48px', boxShadow: '0 4px 12px rgba(108,99,255,0.3)' }}>Gerar Slots</button>
               </div>
             </div>
 

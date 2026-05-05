@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MapPin, CalendarCheck, Share2, Search } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Star, ChevronLeft, Bot, Check } from 'lucide-react';
 import { Provider, Appointment } from '../types.ts';
 import BookingAgent from './BookingAgent.tsx';
 
@@ -9,49 +9,174 @@ interface ProviderProfileProps {
   onAppointmentConfirmed: (appointment: Appointment) => void;
 }
 
+type ProfileTab = 'services' | 'portfolio' | 'about';
+
 const ProviderProfile: React.FC<ProviderProfileProps> = ({ provider, onAppointmentConfirmed }) => {
   const [isBooking, setIsBooking] = useState(false);
+  const [activeTab, setActiveTab] = useState<ProfileTab>('services');
+
+  const minPrice = provider.services.length > 0
+    ? Math.min(...provider.services.map(s => s.price))
+    : null;
+
+  const tabs: { id: ProfileTab; label: string }[] = [
+    { id: 'services',  label: 'Serviços' },
+    { id: 'portfolio', label: 'Portfólio' },
+    { id: 'about',     label: 'Sobre' },
+  ];
 
   return (
-    <div className="max-w-4xl mx-auto bg-white min-h-screen shadow-lg pb-24 md:rounded-[40px] md:my-8 overflow-hidden">
-      <div className="relative h-56 bg-slate-200">
+    <div className="max-w-2xl mx-auto animate-fade-up" style={{ background: 'var(--bg)' }}>
+
+      {/* ── Cover ─────────────────────────────────────────────────── */}
+      <div className="relative h-64 md:h-72 overflow-hidden md:rounded-b-3xl">
         <img src={provider.coverImage} className="w-full h-full object-cover" alt="Cover" />
-        <img src={provider.avatar} className="w-32 h-32 rounded-[28px] border-4 border-white object-cover absolute -bottom-16 left-6 shadow-xl" alt="Avatar" />
+        <div className="absolute inset-0"
+             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
+
+        {/* Back button */}
+        <button
+          onClick={() => window.history.back()}
+          className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center shadow-md backdrop-blur-sm"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-700" />
+        </button>
       </div>
 
-      <div className="mt-20 px-8 space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-black text-slate-900">{provider.name}</h1>
-            <p className="text-slate-500 font-bold flex items-center mt-1 uppercase text-xs">
-              <MapPin className="w-4 h-4 mr-1" /> {provider.category}
-            </p>
+      {/* ── Profile Header ────────────────────────────────────────── */}
+      <div className="bg-white px-5 pt-0 pb-4" style={{ boxShadow: 'var(--shadow-sm)' }}>
+        <div className="flex items-end gap-4 -mt-10 mb-4">
+          <img
+            src={provider.avatar}
+            className="w-20 h-20 rounded-2xl object-cover border-4 border-white flex-shrink-0"
+            style={{ boxShadow: 'var(--shadow-md)' }}
+            alt={provider.name}
+          />
+          <div className="pb-1 flex-1 min-w-0">
+            <h1 className="text-xl font-black text-gray-900 leading-tight truncate">{provider.name}</h1>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+              <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: 'var(--brand)' }}>
+                <MapPin className="w-3.5 h-3.5" />
+                {provider.category}
+              </span>
+              {provider.reviews.length > 0 && (
+                <span className="flex items-center gap-1 text-xs text-amber-500 font-semibold">
+                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                  5.0 ({provider.reviews.length})
+                </span>
+              )}
+              {minPrice && (
+                <span className="flex items-center gap-1 text-xs text-gray-400 font-medium">
+                  <DollarSign className="w-3.5 h-3.5" />
+                  A partir de R$ {minPrice}
+                </span>
+              )}
+            </div>
           </div>
-          <button 
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-1 bg-gray-100 p-1 rounded-2xl">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all duration-200
+                ${activeTab === tab.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Tab Content ───────────────────────────────────────────── */}
+      <div className="px-4 py-5 space-y-3 pb-32">
+
+        {/* Services Tab */}
+        {activeTab === 'services' && (
+          provider.services.length > 0 ? provider.services.map(s => (
+            <div key={s.id} className="bg-white rounded-2xl p-4 flex items-center gap-4"
+                 style={{ boxShadow: 'var(--shadow-sm)' }}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                   style={{ background: 'var(--brand-light)' }}>
+                <Clock className="w-5 h-5" style={{ color: 'var(--brand)' }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-gray-900 text-sm">{s.name}</p>
+                <p className="text-xs text-gray-400 font-medium mt-0.5">{s.duration} minutos</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="font-black text-base" style={{ color: 'var(--brand)' }}>R$ {s.price}</p>
+              </div>
+            </div>
+          )) : (
+            <div className="text-center py-12 text-gray-300 font-medium">Nenhum serviço cadastrado.</div>
+          )
+        )}
+
+        {/* Portfolio Tab */}
+        {activeTab === 'portfolio' && (
+          provider.portfolio.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {provider.portfolio.map(post => (
+                <div key={post.id} className="aspect-square rounded-2xl overflow-hidden relative group"
+                     style={{ boxShadow: 'var(--shadow-sm)' }}>
+                  <img src={post.imageUrl} className="w-full h-full object-cover" alt={post.caption} />
+                  <div className="absolute inset-0 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity"
+                       style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}>
+                    <p className="text-white text-xs font-medium leading-snug line-clamp-2">{post.caption}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-300 font-medium">Nenhum post ainda.</div>
+          )
+        )}
+
+        {/* About Tab */}
+        {activeTab === 'about' && (
+          <div className="bg-white rounded-2xl p-5" style={{ boxShadow: 'var(--shadow-sm)' }}>
+            <h3 className="font-bold text-gray-900 mb-3">Sobre {provider.name}</h3>
+            <p className="text-gray-500 text-sm leading-relaxed font-medium">
+              {provider.bio || 'Nenhuma descrição disponível.'}
+            </p>
+            {provider.availableSlots.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">
+                  Horários Disponíveis
+                </p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--brand)' }}>
+                  {provider.availableSlots.length} horário{provider.availableSlots.length !== 1 ? 's' : ''} disponíve{provider.availableSlots.length !== 1 ? 'is' : 'l'}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ── Sticky Booking Button ─────────────────────────────────── */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 p-4 md:relative md:p-0 md:max-w-2xl md:mx-auto"
+           style={{ background: 'linear-gradient(to top, var(--bg) 80%, transparent)' }}>
+        <div className="max-w-2xl mx-auto">
+          <button
             onClick={() => setIsBooking(true)}
-            className="bg-indigo-600 text-white px-8 py-4 rounded-3xl font-black shadow-xl"
+            className="w-full brand-gradient text-white font-bold text-base rounded-2xl py-4 flex items-center justify-center gap-2.5"
+            style={{ boxShadow: '0 8px 32px rgba(108,99,255,0.35)' }}
           >
+            <Bot className="w-5 h-5" />
             Agendar com IA
           </button>
         </div>
-        <p className="text-slate-600">{provider.bio}</p>
       </div>
 
-      <div className="p-8 space-y-4">
-        <h3 className="font-black text-xl">Serviços</h3>
-        {provider.services.map(s => (
-          <div key={s.id} className="p-6 bg-slate-50 rounded-3xl flex justify-between items-center">
-            <span className="font-bold">{s.name}</span>
-            <span className="font-black text-indigo-600">R$ {s.price}</span>
-          </div>
-        ))}
-      </div>
-
+      {/* ── Booking Agent Modal ───────────────────────────────────── */}
       {isBooking && (
-        <BookingAgent 
-          provider={provider} 
-          onClose={() => setIsBooking(false)} 
-          onConfirm={onAppointmentConfirmed}
+        <BookingAgent
+          provider={provider}
+          onClose={() => setIsBooking(false)}
+          onConfirm={apt => { onAppointmentConfirmed(apt); }}
         />
       )}
     </div>

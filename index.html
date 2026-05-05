@@ -5,27 +5,123 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agendei AI — Plataforma de Agendamentos Inteligentes</title>
+  <meta name="description" content="Agende serviços com profissionais incríveis usando Inteligência Artificial. Rápido, fácil e inteligente." />
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script>
-    // Mock do ambiente process para compatibilidade
     window.process = { env: { API_KEY: "" } };
   </script>
+
   <style>
+    :root {
+      --brand:       #6C63FF;
+      --brand-dark:  #4F46E5;
+      --brand-light: #EEF2FF;
+      --bg:          #F5F5FA;
+      --surface:     #FFFFFF;
+      --text-1:      #0F0F1A;
+      --text-2:      #6B7280;
+      --border:      #E5E7EB;
+      --radius-sm:   10px;
+      --radius-md:   16px;
+      --radius-lg:   24px;
+      --radius-xl:   32px;
+      --shadow-sm:   0 2px 8px rgba(108,99,255,0.06);
+      --shadow-md:   0 4px 24px rgba(108,99,255,0.10);
+      --shadow-lg:   0 8px 40px rgba(108,99,255,0.16);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-1);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scrollbar sutil */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+    /* Animações globais */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(16px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0)    scale(1); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .animate-\[slideIn_0\.25s_ease-out\] {
-      animation: slideIn 0.25s ease-out both;
+    @keyframes pulse-dot {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40%           { transform: scale(1);   opacity: 1; }
     }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-fade-up   { animation: fadeUp   0.35s ease both; }
+    .animate-scale-in  { animation: scaleIn  0.3s  ease both; }
+    .animate-slide-in  { animation: slideIn  0.25s ease both; }
+    .animate-\[slideIn_0\.25s_ease-out\] { animation: slideIn 0.25s ease-out both; }
+
+    /* Gradient brand */
+    .brand-gradient {
+      background: linear-gradient(135deg, var(--brand) 0%, #A78BFA 100%);
+    }
+    .brand-gradient-text {
+      background: linear-gradient(135deg, var(--brand) 0%, #A78BFA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Card hover elevate */
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Glassmorphism */
+    .glass {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Input focus ring brand */
+    .input-brand:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
+      border-color: var(--brand);
+    }
+
+    /* Bottom nav safe area */
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+    /* Typing dots */
+    .typing-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #9CA3AF;
+      animation: pulse-dot 1.2s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
   </style>
 </head>
 
