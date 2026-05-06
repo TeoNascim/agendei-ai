@@ -238,21 +238,22 @@ const MainContent: React.FC = () => {
               <div className="animate-fade-up">
 
                 {/* ── Hero Dark ───────────────────────────────────── */}
-                <div className="hero-gradient relative overflow-hidden">
+                <div className="hero-gradient relative overflow-hidden flex flex-col justify-center"
+                     style={{ minHeight: 'calc(100vh - 68px)' }}>
 
                   {/* Blobs animados */}
-                  <div className="hero-blob w-96 h-96 -top-24 -right-24 opacity-30"
+                  <div className="hero-blob w-[500px] h-[500px] -top-32 -right-32 opacity-25"
                        style={{ background: 'radial-gradient(circle, #8B5CF6, transparent 70%)', animationDelay: '0s' }} />
-                  <div className="hero-blob w-72 h-72 -bottom-20 -left-16 opacity-20"
+                  <div className="hero-blob w-80 h-80 -bottom-24 -left-20 opacity-20"
                        style={{ background: 'radial-gradient(circle, #5B4FE8, transparent 70%)', animationDelay: '3s' }} />
-                  <div className="hero-blob w-48 h-48 top-1/2 left-1/2 opacity-15"
-                       style={{ background: 'radial-gradient(circle, #F59E0B, transparent 70%)', animationDelay: '5s' }} />
+                  <div className="hero-blob w-56 h-56 opacity-15"
+                       style={{ background: 'radial-gradient(circle, #F59E0B, transparent 70%)', animationDelay: '5s', top: '60%', left: '55%' }} />
 
                   {/* Dot grid sutil */}
                   <div className="absolute inset-0 opacity-10"
                        style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 
-                  <div className="max-w-7xl mx-auto px-4 md:px-8 pt-14 pb-12 md:pt-20 md:pb-16 relative">
+                  <div className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24 relative w-full">
                     {/* Eyebrow */}
                     <div className="inline-flex items-center gap-2 mb-5">
                       <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"

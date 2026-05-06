@@ -28,11 +28,12 @@ const ProviderProfile: React.FC<ProviderProfileProps> = ({ provider, onAppointme
   return (
     <div className="max-w-2xl mx-auto animate-fade-up" style={{ background: 'var(--bg)' }}>
 
-      {/* ── Cover ─────────────────────────────────────────────────── */}
-      <div className="relative h-64 md:h-72 overflow-hidden md:rounded-b-3xl">
+      {/* ── Cover ───────────────────────────────────── */}
+      <div className="relative h-56 md:h-72 overflow-hidden">
         <img src={provider.coverImage} className="w-full h-full object-cover" alt="Cover" />
+        {/* Gradiente sutil apenas para o botão voltar */}
         <div className="absolute inset-0"
-             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
+             style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 40%)' }} />
 
         {/* Back button */}
         <button
@@ -43,36 +44,39 @@ const ProviderProfile: React.FC<ProviderProfileProps> = ({ provider, onAppointme
         </button>
       </div>
 
-      {/* ── Profile Header ────────────────────────────────────────── */}
-      <div className="bg-white px-5 pt-0 pb-4" style={{ boxShadow: 'var(--shadow-sm)' }}>
-        <div className="flex items-end gap-4 -mt-10 mb-4">
+      {/* ── Profile Header ────────────────────────────────── */}
+      <div className="bg-white px-5 pb-4" style={{ boxShadow: 'var(--shadow-sm)' }}>
+        {/* Avatar flutuando sobre a borda da foto */}
+        <div className="-mt-10 mb-3">
           <img
             src={provider.avatar}
-            className="w-20 h-20 rounded-2xl object-cover border-4 border-white flex-shrink-0"
+            className="w-20 h-20 rounded-2xl object-cover border-4 border-white"
             style={{ boxShadow: 'var(--shadow-md)' }}
             alt={provider.name}
           />
-          <div className="pb-1 flex-1 min-w-0">
-            <h1 className="text-xl font-black text-gray-900 leading-tight truncate">{provider.name}</h1>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-              <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: 'var(--brand)' }}>
-                <MapPin className="w-3.5 h-3.5" />
-                {provider.category}
-              </span>
-              {provider.reviews.length > 0 && (
-                <span className="flex items-center gap-1 text-xs text-amber-500 font-semibold">
-                  <Star className="w-3.5 h-3.5 fill-amber-400" />
-                  5.0 ({provider.reviews.length})
-                </span>
-              )}
-              {minPrice && (
-                <span className="flex items-center gap-1 text-xs text-gray-400 font-medium">
-                  <DollarSign className="w-3.5 h-3.5" />
-                  A partir de R$ {minPrice}
-                </span>
-              )}
-            </div>
-          </div>
+        </div>
+
+        {/* Nome e meta — claramente na área branca */}
+        <h1 className="text-xl font-black leading-tight mb-1" style={{ color: 'var(--text-1)' }}>
+          {provider.name}
+        </h1>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4">
+          <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: 'var(--brand)' }}>
+            <MapPin className="w-3.5 h-3.5" />
+            {provider.category}
+          </span>
+          {provider.reviews.length > 0 && (
+            <span className="flex items-center gap-1 text-xs text-amber-500 font-semibold">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              5.0 ({provider.reviews.length})
+            </span>
+          )}
+          {minPrice && (
+            <span className="flex items-center gap-1 text-xs font-medium" style={{ color: 'var(--text-2)' }}>
+              <DollarSign className="w-3.5 h-3.5" />
+              A partir de R$ {minPrice}
+            </span>
+          )}
         </div>
 
         {/* Tabs */}
