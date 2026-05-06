@@ -237,41 +237,52 @@ const MainContent: React.FC = () => {
             <Route path="/" element={
               <div className="animate-fade-up">
 
-                {/* Hero */}
-                <div className="relative overflow-hidden" style={{
-                  background: 'linear-gradient(160deg, #EEF2FF 0%, #F5F0FF 50%, #F5F5FA 100%)'
-                }}>
-                  {/* Decorative blobs */}
-                  <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-20"
-                       style={{ background: 'radial-gradient(circle, #6C63FF, transparent 70%)' }} />
-                  <div className="absolute -bottom-10 -left-10 w-60 h-60 rounded-full opacity-15"
-                       style={{ background: 'radial-gradient(circle, #A78BFA, transparent 70%)' }} />
+                {/* ── Hero Dark ───────────────────────────────────── */}
+                <div className="hero-gradient relative overflow-hidden">
 
-                  <div className="max-w-7xl mx-auto px-4 md:px-8 pt-10 pb-8 relative">
-                    <p className="text-sm font-bold uppercase tracking-widest mb-3"
-                       style={{ color: 'var(--brand)' }}>
-                      ✦ Agendamentos inteligentes
-                    </p>
-                    <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-2">
+                  {/* Blobs animados */}
+                  <div className="hero-blob w-96 h-96 -top-24 -right-24 opacity-30"
+                       style={{ background: 'radial-gradient(circle, #8B5CF6, transparent 70%)', animationDelay: '0s' }} />
+                  <div className="hero-blob w-72 h-72 -bottom-20 -left-16 opacity-20"
+                       style={{ background: 'radial-gradient(circle, #5B4FE8, transparent 70%)', animationDelay: '3s' }} />
+                  <div className="hero-blob w-48 h-48 top-1/2 left-1/2 opacity-15"
+                       style={{ background: 'radial-gradient(circle, #F59E0B, transparent 70%)', animationDelay: '5s' }} />
+
+                  {/* Dot grid sutil */}
+                  <div className="absolute inset-0 opacity-10"
+                       style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+
+                  <div className="max-w-7xl mx-auto px-4 md:px-8 pt-14 pb-12 md:pt-20 md:pb-16 relative">
+                    {/* Eyebrow */}
+                    <div className="inline-flex items-center gap-2 mb-5">
+                      <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"
+                            style={{ background: 'rgba(245,158,11,0.15)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)' }}>
+                        ✦ Agendamentos com IA
+                      </span>
+                    </div>
+
+                    {/* Título */}
+                    <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.08] mb-4">
                       Encontre seu<br />
-                      <span className="brand-gradient-text">profissional ideal</span>
+                      <span style={{ color: '#F59E0B' }}>profissional ideal</span>
                     </h1>
-                    <p className="text-gray-500 font-medium mb-8 text-base max-w-md">
-                      Agende com IA em segundos. Sem ligações, sem espera.
+                    <p className="text-white/60 font-medium mb-10 text-base md:text-lg max-w-lg leading-relaxed">
+                      Agende qualquer serviço com inteligência artificial.<br className="hidden md:block" />
+                      Sem ligações, sem espera, sem complicação.
                     </p>
 
                     {/* Search bar */}
-                    <div className="relative max-w-xl">
+                    <div className="relative max-w-2xl">
                       <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         id="search-providers"
                         type="text"
                         placeholder="Buscar barbeiro, psicólogo, nutricionista..."
-                        className="w-full bg-white rounded-2xl py-4 pl-13 pr-5 text-sm font-medium input-brand transition-all"
+                        className="w-full bg-white rounded-2xl py-4 pr-5 text-sm font-medium input-brand transition-all"
                         style={{
                           paddingLeft: '3.25rem',
-                          border: '1.5px solid var(--border)',
-                          boxShadow: 'var(--shadow-md)',
+                          border: 'none',
+                          boxShadow: '0 8px 40px rgba(0,0,0,0.35)',
                           color: 'var(--text-1)'
                         }}
                         value={searchTerm}
@@ -279,18 +290,19 @@ const MainContent: React.FC = () => {
                       />
                     </div>
 
-                    {/* Category chips */}
-                    <div className="flex gap-2 mt-4 overflow-x-auto pb-1 hide-scrollbar">
+                    {/* Category chips — glass escuro */}
+                    <div className="flex gap-2 mt-5 overflow-x-auto pb-1">
                       {CATEGORIES.map(cat => (
                         <button
                           key={cat}
                           onClick={() => setActiveCategory(cat)}
-                          className="flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 border"
+                          className="flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 border"
                           style={{
-                            background: activeCategory === cat ? 'var(--brand)' : 'white',
-                            color: activeCategory === cat ? 'white' : 'var(--text-2)',
-                            borderColor: activeCategory === cat ? 'var(--brand)' : 'var(--border)',
-                            boxShadow: activeCategory === cat ? '0 4px 12px rgba(108,99,255,0.3)' : 'none'
+                            background: activeCategory === cat ? '#F59E0B' : 'rgba(255,255,255,0.1)',
+                            color: activeCategory === cat ? '#1a1060' : 'rgba(255,255,255,0.75)',
+                            borderColor: activeCategory === cat ? '#F59E0B' : 'rgba(255,255,255,0.2)',
+                            boxShadow: activeCategory === cat ? '0 4px 16px rgba(245,158,11,0.4)' : 'none',
+                            backdropFilter: 'blur(8px)'
                           }}
                         >
                           {cat}
@@ -317,83 +329,77 @@ const MainContent: React.FC = () => {
                           {filteredProviders.length} profissiona{filteredProviders.length !== 1 ? 'is' : 'l'}
                         </h2>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {filteredProviders.map((p, i) => (
-                          <div
-                            key={p.id}
-                            onClick={() => navigate(`/p/${p.slug}`)}
-                            className="bg-white rounded-2xl overflow-hidden cursor-pointer card-hover"
-                            style={{
-                              boxShadow: 'var(--shadow-sm)',
-                              animationDelay: `${i * 60}ms`
-                            }}
-                          >
-                            {/* Cover */}
-                            <div className="relative h-48 overflow-hidden">
-                              <img
-                                src={p.coverImage}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                alt={p.name}
-                              />
-                              {/* Gradient overlay */}
-                              <div className="absolute inset-0"
-                                   style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 55%)' }} />
-
-                              {/* Category badge */}
-                              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wide"
-                                    style={{ background: 'rgba(108,99,255,0.85)', backdropFilter: 'blur(8px)' }}>
-                                {p.category}
-                              </span>
-                            </div>
-
-                            {/* Info */}
-                            <div className="p-5 relative">
-                              {/* Avatar overlapping cover */}
-                              <div className="absolute -top-8 left-5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {filteredProviders.map((p, i) => (
+                            <div
+                              key={p.id}
+                              onClick={() => navigate(`/p/${p.slug}`)}
+                              className="bg-white rounded-3xl overflow-hidden cursor-pointer card-hover group"
+                              style={{ boxShadow: 'var(--shadow-card)', animationDelay: `${i * 60}ms` }}
+                            >
+                              {/* Cover */}
+                              <div className="relative h-52 overflow-hidden">
                                 <img
-                                  src={p.avatar}
-                                  className="w-14 h-14 rounded-2xl object-cover border-[3px] border-white"
-                                  style={{ boxShadow: 'var(--shadow-md)' }}
+                                  src={p.coverImage}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                   alt={p.name}
                                 />
+                                {/* Gradient overlay mais pronunciado */}
+                                <div className="absolute inset-0"
+                                     style={{ background: 'linear-gradient(to top, rgba(13,11,38,0.7) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
+
+                                {/* Badge categoria — glass */}
+                                <span className="absolute top-3.5 left-3.5 px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-widest glass-dark border border-white/10">
+                                  {p.category}
+                                </span>
+
+                                {/* Slots disponíveis */}
+                                {p.availableSlots.length > 0 && (
+                                  <span className="absolute top-3.5 right-3.5 flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold glass-dark border border-white/10"
+                                        style={{ color: '#34D399' }}>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                    Disponível
+                                  </span>
+                                )}
+
+                                {/* Nome sobre a imagem */}
+                                <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-3">
+                                  <img
+                                    src={p.avatar}
+                                    className="w-12 h-12 rounded-2xl object-cover border-[2.5px] border-white/80 flex-shrink-0"
+                                    style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }}
+                                    alt={p.name}
+                                  />
+                                  <div className="min-w-0">
+                                    <h3 className="font-black text-white text-base leading-snug truncate">{p.name}</h3>
+                                    <p className="text-white/60 text-xs font-medium">{p.services.length} serviço{p.services.length !== 1 ? 's' : ''}</p>
+                                  </div>
+                                </div>
                               </div>
 
-                              <div className="pt-8">
-                                <h3 className="font-bold text-gray-900 text-base leading-snug">{p.name}</h3>
-                                <div className="flex items-center gap-3 mt-2">
-                                  <span className="flex items-center gap-1 text-xs text-gray-400 font-medium">
-                                    <MapPin className="w-3.5 h-3.5" style={{ color: 'var(--brand)' }} />
-                                    {p.category}
-                                  </span>
-                                  {p.services.length > 0 && (
-                                    <span className="flex items-center gap-1 text-xs text-gray-400 font-medium">
-                                      <Clock className="w-3.5 h-3.5" />
-                                      {p.services.length} serviço{p.services.length !== 1 ? 's' : ''}
-                                    </span>
-                                  )}
+                              {/* Footer */}
+                              <div className="px-4 py-3.5 flex items-center justify-between">
+                                <div>
+                                  <p className="text-xs text-gray-400 font-medium">A partir de</p>
+                                  <p className="font-black text-base" style={{ color: 'var(--brand)' }}>
+                                    R$ {p.services[0]?.price || '—'}
+                                  </p>
                                 </div>
-
-                                <div className="flex items-center justify-between mt-4">
-                                  <span className="text-xs text-gray-400">
-                                    A partir de <span className="font-bold" style={{ color: 'var(--brand)' }}>
-                                      R$ {p.services[0]?.price || '—'}
-                                    </span>
-                                  </span>
-                                  <span className="text-xs font-bold px-3 py-1 rounded-full"
-                                        style={{ background: 'var(--brand-light)', color: 'var(--brand)' }}>
-                                    Agendar →
-                                  </span>
-                                </div>
+                                <span className="text-xs font-bold px-4 py-2 rounded-xl transition-all"
+                                      style={{ background: 'var(--brand-light)', color: 'var(--brand)' }}>
+                                  Ver perfil →
+                                </span>
                               </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
+                          ))}
+                        </div>
+                      </>
+                    )}
                 </div>
               </div>
             } />
+
+
 
             {/* ── Área do Cliente ── */}
             <Route path="/me" element={

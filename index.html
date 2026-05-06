@@ -16,21 +16,24 @@
 
   <style>
     :root {
-      --brand:       #6C63FF;
-      --brand-dark:  #4F46E5;
-      --brand-light: #EEF2FF;
-      --bg:          #F5F5FA;
-      --surface:     #FFFFFF;
-      --text-1:      #0F0F1A;
-      --text-2:      #6B7280;
-      --border:      #E5E7EB;
-      --radius-sm:   10px;
-      --radius-md:   16px;
-      --radius-lg:   24px;
-      --radius-xl:   32px;
-      --shadow-sm:   0 2px 8px rgba(108,99,255,0.06);
-      --shadow-md:   0 4px 24px rgba(108,99,255,0.10);
-      --shadow-lg:   0 8px 40px rgba(108,99,255,0.16);
+      --brand:        #5B4FE8;          /* Indigo vibrante */
+      --brand-dark:   #3730A3;          /* Indigo profundo */
+      --brand-light:  #ECEAFE;          /* Indigo muito claro */
+      --accent:       #F59E0B;          /* Âmbar/dourado */
+      --accent-light: #FEF3C7;          /* Âmbar claro */
+      --success:      #10B981;          /* Esmeralda */
+      --bg:           #F8F8FF;          /* Branco-azulado suave */
+      --surface:      #FFFFFF;
+      --text-1:       #0D0B26;          /* Quase preto, tom indigo */
+      --text-2:       #64748B;          /* Slate */
+      --border:       #E2E8F0;
+      --hero-from:    #13104A;          /* Azul-noite profundo */
+      --hero-mid:     #2D2787;          /* Indigo médio */
+      --hero-to:      #1a1060;          /* Roxo-noite */
+      --shadow-sm:    0 2px 12px rgba(91,79,232,0.08);
+      --shadow-md:    0 6px 28px rgba(91,79,232,0.14);
+      --shadow-lg:    0 12px 48px rgba(91,79,232,0.22);
+      --shadow-card:  0 4px 20px rgba(13,11,38,0.08);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -42,77 +45,92 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Scrollbar sutil */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 99px; }
     ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
 
-    /* Animações globais */
+    /* Animações */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      from { opacity: 0; transform: translateY(18px) scale(0.97); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes pulse-dot {
       0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
       40%           { transform: scale(1);   opacity: 1; }
     }
-    @keyframes shimmer {
-      0%   { background-position: -200% center; }
-      100% { background-position:  200% center; }
-    }
     @keyframes scaleIn {
-      from { opacity: 0; transform: scale(0.92); }
+      from { opacity: 0; transform: scale(0.93); }
       to   { opacity: 1; transform: scale(1); }
     }
+    @keyframes floatBlob {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-20px) scale(1.06); }
+    }
 
-    .animate-fade-up   { animation: fadeUp   0.35s ease both; }
-    .animate-scale-in  { animation: scaleIn  0.3s  ease both; }
-    .animate-slide-in  { animation: slideIn  0.25s ease both; }
-    .animate-\[slideIn_0\.25s_ease-out\] { animation: slideIn 0.25s ease-out both; }
+    .animate-fade-up  { animation: fadeUp  0.4s ease both; }
+    .animate-scale-in { animation: scaleIn 0.3s ease both; }
+    .animate-slide-in { animation: slideIn 0.28s ease both; }
 
-    /* Gradient brand */
+    /* Gradientes */
     .brand-gradient {
-      background: linear-gradient(135deg, var(--brand) 0%, #A78BFA 100%);
+      background: linear-gradient(135deg, var(--brand) 0%, #8B5CF6 100%);
     }
     .brand-gradient-text {
-      background: linear-gradient(135deg, var(--brand) 0%, #A78BFA 100%);
+      background: linear-gradient(135deg, var(--brand) 0%, #8B5CF6 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+    .hero-gradient {
+      background: linear-gradient(140deg, var(--hero-from) 0%, var(--hero-mid) 55%, var(--hero-to) 100%);
+    }
+    .accent-gradient {
+      background: linear-gradient(135deg, var(--accent) 0%, #FBBF24 100%);
+    }
 
-    /* Card hover elevate */
+    /* Cards */
     .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.32s cubic-bezier(.22,.68,0,1.2), box-shadow 0.32s ease;
     }
     .card-hover:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-lg);
     }
 
-    /* Glassmorphism */
+    /* Glass */
     .glass {
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .glass-dark {
+      background: rgba(19,16,74,0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
 
-    /* Input focus ring brand */
+    /* Input */
     .input-brand:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
+      box-shadow: 0 0 0 3px rgba(91,79,232,0.2);
       border-color: var(--brand);
     }
 
-    /* Bottom nav safe area */
+    /* Blob decorativo */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      animation: floatBlob 8s ease-in-out infinite;
+    }
+
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 
-    /* Typing dots */
     .typing-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
